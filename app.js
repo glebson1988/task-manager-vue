@@ -14,6 +14,7 @@ var app = new Vue({
                         </div>
                       </div>
                       <div class="right floated three wide column">
+                        <i class="icon pencil blue" alt="Edit" v-on:click="$root.editTask($event, task.id)"></i>
                         <i class="icon trash red" alt="Delete" v-on:click="$root.deleteTask($event, task.id)"></i>
                       </div>
                     </div>
@@ -28,7 +29,7 @@ var app = new Vue({
             {id: 3, name: 'Three', description: 'This is a complete todo', completed: true},
             {id: 4, name: 'Four', description: 'This is another complete todo', completed: true}
         ],
-        message: 'Hello world!'
+        task: {}
     },
     computed: {
         completedTasks: function () {
@@ -46,6 +47,13 @@ var app = new Vue({
 
             if (task) {
                 task.completed = !task.completed;
+            }
+        },
+        editTask: function (event, id) {
+            let task = this.tasks.find(item => item.id == id);
+
+            if (task) {
+                this.task = { id: id, name: task.name, description: task.description, completed: task.completed  };
             }
         },
         deleteTask: function (event, id) {
