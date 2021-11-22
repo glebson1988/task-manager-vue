@@ -9,11 +9,12 @@ var app = new Vue({
                     <div class="ui grid">
                       <div class="left floated twelve wide column">
                         <div class="ui checkbox">
-                          <input type="checkbox" name="task" :checked="task.completed">
+                          <input type="checkbox" name="task" :checked="task.completed" v-on:click="$root.toggleDone($event, task.id)" >
                           <label>{{ task.name }} <span class="description">{{ task.description }}</span></label>
                         </div>
                       </div>
                       <div class="right floated three wide column">
+                        <i class="icon trash red" alt="Delete" v-on:click="$root.deleteTask($event, task.id)"></i>
                       </div>
                     </div>
               </div>
@@ -37,4 +38,24 @@ var app = new Vue({
             return this.tasks.filter(item => item.completed == false);
         }
     },
-})
+    methods: {
+        toggleDone: function (event, id) {
+            event.stopImmediatePropagation();
+
+            let task = this.tasks.find(item => item.id == id);
+
+            if (task) {
+                task.completed = !task.completed;
+            }
+        },
+        deleteTask: function (event, id) {
+            event.stopImmediatePropagation();
+
+            let taskIndex = this.tasks.findIndex(item => item.id == id);
+
+            if (taskIndex > -1) {
+                this.$delete(this.tasks, taskIndex);
+            }
+        }
+    }
+});
