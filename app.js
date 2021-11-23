@@ -30,7 +30,8 @@ var app = new Vue({
             {id: 4, name: 'Four', description: 'This is another complete todo', completed: true}
         ],
         task: {},
-        action: 'create'
+        action: 'create',
+        message: 'Hey there!'
     },
     computed: {
         completedTasks: function () {
@@ -49,6 +50,7 @@ var app = new Vue({
         clear: function () {
             this.task = {};
             this.action = 'create';
+            this.message = '';
         },
         toggleDone: function (event, id) {
             event.stopImmediatePropagation();
@@ -57,11 +59,10 @@ var app = new Vue({
 
             if (task) {
                 task.completed = !task.completed;
+                this.message = `Task ${id} updated`;
             }
         },
         createTask: function (event) {
-            event.preventDefault();
-
             if (!this.task.completed) {
                 this.task.completed = false;
             } else {
@@ -73,6 +74,7 @@ var app = new Vue({
             let newTask = Object.assign({}, this.task);
             this.tasks.push(newTask);
             this.clear();
+            this.message = `New task created`
         },
         editTask: function (event, id) {
             event.stopImmediatePropagation();
@@ -87,7 +89,6 @@ var app = new Vue({
         },
         updateTask: function (event, id) {
             event.stopImmediatePropagation();
-            event.preventDefault();
 
             let task = this.tasks.find(item => item.id == id);
 
@@ -95,6 +96,7 @@ var app = new Vue({
                 task.name = this.task.name;
                 task.description = this.task.description;
                 task.completed = this.task.completed;
+                this.message = `Task ${id} updated`;
             }
         },
         deleteTask: function (event, id) {
@@ -104,6 +106,7 @@ var app = new Vue({
 
             if (taskIndex > -1) {
                 this.$delete(this.tasks, taskIndex);
+                this.message = `Task ${id} deleted`
             }
         }
     }
